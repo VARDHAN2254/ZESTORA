@@ -1,0 +1,6 @@
+{
+  "name": "@zestora/tooling",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Internal developer tooling for ZESTORA"
+}

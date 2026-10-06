@@ -1,0 +1,1 @@
+"""USERS domain module."""
