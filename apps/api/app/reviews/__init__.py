@@ -1,0 +1,1 @@
+"""REVIEWS domain module."""

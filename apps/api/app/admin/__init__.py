@@ -1,0 +1,1 @@
+"""ADMIN domain module."""
