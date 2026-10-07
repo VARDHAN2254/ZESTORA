@@ -203,6 +203,11 @@ class MenuItem(Base):
             "price >= 0",
             name="ck_menu_items_price_non_negative",
         ),
+        sa.UniqueConstraint(
+            "id",
+            "restaurant_id",
+            name="uq_menu_items_id_restaurant_id",
+        ),
         sa.Index("ix_menu_items_restaurant_id", "restaurant_id"),
         sa.Index("ix_menu_items_category_id", "category_id"),
     )

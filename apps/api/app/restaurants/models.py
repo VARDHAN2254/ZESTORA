@@ -14,6 +14,7 @@ from app.restaurants.enums import RestaurantStatus
 if TYPE_CHECKING:
     from app.catalog.models import MenuCategory, MenuItem
     from app.identity.models import User
+    from app.orders.models import Order
 
 
 def utc_now() -> datetime:
@@ -126,6 +127,10 @@ class Restaurant(Base):
         cascade="all, delete-orphan",
         passive_deletes=True,
         foreign_keys="MenuItem.restaurant_id",
+    )
+    orders: Mapped[list["Order"]] = relationship(
+        "Order",
+        back_populates="restaurant",
     )
 
     def __init__(
