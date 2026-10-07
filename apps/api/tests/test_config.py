@@ -13,6 +13,14 @@ def test_default_settings():
         "http://localhost:3000",
         "http://127.0.0.1:3000",
     ]
+    assert settings.DATABASE_URL == (
+        "postgresql+asyncpg://postgres:postgres@localhost:5432/zestora_dev"
+    )
+    assert settings.DB_POOL_SIZE == 5
+    assert settings.DB_MAX_OVERFLOW == 10
+    assert settings.safe_database_url == (
+        "postgresql+asyncpg://postgres:***@localhost:5432/zestora_dev"
+    )
 
 
 def test_backward_compatibility_properties():
@@ -47,3 +55,18 @@ def test_custom_settings_and_cors_parsing():
         "https://zestora.app",
         "https://admin.zestora.app",
     ]
+
+
+def test_database_url_validation():
+    # Standard postgresql:// schema should be converted to postgresql+asyncpg://
+    s1 = Settings(DATABASE_URL="postgresql://user:secret@db.host:5432/db")
+    assert s1.DATABASE_URL == "postgresql+asyncpg://user:secret@db.host:5432/db"
+    assert s1.safe_database_url == "postgresql+asyncpg://user:***@db.host:5432/db"
+
+    # Legacy postgres:// schema should also be converted
+    s2 = Settings(DATABASE_URL="postgres://user:secret@db.host:5432/db")
+    assert s2.DATABASE_URL == "postgresql+asyncpg://user:secret@db.host:5432/db"
+
+    # Explicit asyncpg url should remain untouched
+    s3 = Settings(DATABASE_URL="postgresql+asyncpg://user:secret@db.host:5432/db")
+    assert s3.DATABASE_URL == "postgresql+asyncpg://user:secret@db.host:5432/db"

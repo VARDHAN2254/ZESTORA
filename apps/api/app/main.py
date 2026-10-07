@@ -1,7 +1,23 @@
+from collections.abc import AsyncGenerator
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
+from app.core.database import close_db_engine
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncGenerator[None, None]:
+    """Application lifespan manager.
+
+    Startup: Initializes application without forcing an upfront database connection.
+    Shutdown: Safely disposes of database connection pools.
+    """
+    yield
+    await close_db_engine()
+
 
 app = FastAPI(
     title=settings.PROJECT_NAME,
@@ -9,6 +25,7 @@ app = FastAPI(
     description="ZESTORA Food Delivery Platform API - Minimal Foundation Skeleton",
     docs_url="/docs",
     redoc_url="/redoc",
+    lifespan=lifespan,
 )
 
 # CORS middleware
