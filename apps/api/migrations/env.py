@@ -29,6 +29,7 @@ def _load_models() -> None:
     import app.catalog.models
     import app.identity.models
     import app.orders.models
+    import app.payments.models
     import app.restaurants.models  # noqa: F401
 
 
