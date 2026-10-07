@@ -11,6 +11,7 @@ from app.core.database import Base
 from app.identity.enums import UserRole, UserStatus
 
 if TYPE_CHECKING:
+    from app.orders.models import Order
     from app.restaurants.models import Restaurant
 
 
@@ -83,6 +84,10 @@ class User(Base):
     restaurants: Mapped[list["Restaurant"]] = relationship(
         "Restaurant",
         back_populates="owner",
+    )
+    orders: Mapped[list["Order"]] = relationship(
+        "Order",
+        back_populates="customer",
     )
 
     def __init__(

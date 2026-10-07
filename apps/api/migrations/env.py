@@ -28,6 +28,7 @@ def _load_models() -> None:
     """Import domain models so target_metadata includes them for migrations."""
     import app.catalog.models
     import app.identity.models
+    import app.orders.models
     import app.restaurants.models  # noqa: F401
 
 
