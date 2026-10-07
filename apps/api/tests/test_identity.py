@@ -129,12 +129,9 @@ def test_migration_metadata_integration():
     from alembic.script import ScriptDirectory
 
     script_dir = ScriptDirectory.from_config(alembic_cfg)
-    head_revision = script_dir.get_current_head()
-    assert head_revision == "0001_create_users_table"
-
-    script = script_dir.get_revision(head_revision)
-    assert script is not None
-    assert script.down_revision is None
+    initial_script = script_dir.get_revision("0001_create_users_table")
+    assert initial_script is not None
+    assert initial_script.down_revision is None
 
 
 def test_migration_upgrade_and_downgrade_sql_generation(capsys):

@@ -2,12 +2,16 @@
 
 import uuid
 from datetime import UTC, datetime
+from typing import TYPE_CHECKING
 
 import sqlalchemy as sa
-from sqlalchemy.orm import Mapped, mapped_column, validates
+from sqlalchemy.orm import Mapped, mapped_column, relationship, validates
 
 from app.core.database import Base
 from app.identity.enums import UserRole, UserStatus
+
+if TYPE_CHECKING:
+    from app.restaurants.models import Restaurant
 
 
 def utc_now() -> datetime:
@@ -73,6 +77,12 @@ class User(Base):
         sa.UniqueConstraint("email", name="uq_users_email"),
         sa.Index("ix_users_role", "role"),
         sa.Index("ix_users_status", "status"),
+    )
+
+    # Relationships
+    restaurants: Mapped[list["Restaurant"]] = relationship(
+        "Restaurant",
+        back_populates="owner",
     )
 
     def __init__(
