@@ -26,7 +26,9 @@ if config is not None and not config.get_main_option("sqlalchemy.url"):
 
 def _load_models() -> None:
     """Import domain models so target_metadata includes them for migrations."""
-    import app.identity.models  # noqa: F401
+    import app.catalog.models
+    import app.identity.models
+    import app.restaurants.models  # noqa: F401
 
 
 def run_migrations_offline() -> None:
