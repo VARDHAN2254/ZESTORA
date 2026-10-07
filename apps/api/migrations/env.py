@@ -24,6 +24,11 @@ if config is not None and not config.get_main_option("sqlalchemy.url"):
     config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 
+def _load_models() -> None:
+    """Import domain models so target_metadata includes them for migrations."""
+    import app.identity.models  # noqa: F401
+
+
 def run_migrations_offline() -> None:
     """Run migrations in 'offline' mode.
 
@@ -32,6 +37,7 @@ def run_migrations_offline() -> None:
     here as well. By skipping the Engine creation
     we don't even need a DBAPI to be available.
     """
+    _load_models()
     url = config.get_main_option("sqlalchemy.url") if config else settings.DATABASE_URL
     context.configure(
         url=url,
@@ -45,6 +51,7 @@ def run_migrations_offline() -> None:
 
 
 def do_run_migrations(connection: Connection) -> None:
+    _load_models()
     context.configure(
         connection=connection,
         target_metadata=target_metadata,
