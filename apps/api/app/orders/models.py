@@ -14,6 +14,7 @@ from app.orders.enums import OrderStatus
 if TYPE_CHECKING:
     from app.catalog.models import MenuItem
     from app.identity.models import User
+    from app.payments.models import Payment
     from app.restaurants.models import Restaurant
 
 
@@ -183,6 +184,10 @@ class Order(Base):
         cascade="all, delete-orphan",
         passive_deletes=True,
         foreign_keys="[OrderItem.order_id, OrderItem.restaurant_id]",
+    )
+    payments: Mapped[list["Payment"]] = relationship(
+        "Payment",
+        back_populates="order",
     )
 
     def __init__(
