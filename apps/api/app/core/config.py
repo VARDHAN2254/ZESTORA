@@ -36,6 +36,11 @@ class Settings(BaseSettings):
     DB_POOL_RECYCLE: int = 1800
     DB_ECHO: bool = False
 
+    # Authentication & JWT configuration
+    JWT_SECRET: str = "dev-insecure-jwt-secret-key-change-in-production-min-32-chars"
+    JWT_ALGORITHM: str = "HS256"
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+
     @field_validator("API_CORS_ORIGINS", mode="before")
     @classmethod
     def assemble_cors_origins(cls, v: list[str] | str) -> list[str] | str:
@@ -82,6 +87,17 @@ class Settings(BaseSettings):
                 (parsed.scheme, netloc, parsed.path, parsed.query, parsed.fragment)
             )
         return self.DATABASE_URL
+
+    def validate_production_jwt_secret(self) -> None:
+        """Validate that in production, JWT_SECRET is not the default weak key."""
+        if self.API_ENV.lower() == "production" and (
+            not self.JWT_SECRET
+            or "dev" in self.JWT_SECRET.lower()
+            or len(self.JWT_SECRET) < 32
+        ):
+            raise ValueError(
+                "JWT_SECRET must be configured with a secure key (at least 32 characters) in production."
+            )
 
 
 settings = Settings()

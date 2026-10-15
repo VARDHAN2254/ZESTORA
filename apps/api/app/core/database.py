@@ -63,6 +63,9 @@ async def get_db() -> AsyncGenerator[AsyncSession, None]:
             raise
 
 
+get_db_session = get_db
+
+
 async def close_db_engine() -> None:
     """Safely dispose of the database connection pool on application shutdown."""
     if engine is not None:
