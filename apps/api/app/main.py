@@ -4,9 +4,11 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.catalog.router import router as catalog_router
 from app.core.config import settings
 from app.core.database import close_db_engine
 from app.identity.router import router as auth_router
+from app.restaurants.router import router as restaurants_router
 
 
 @asynccontextmanager
@@ -63,3 +65,5 @@ async def health_check():
 
 # Feature routers
 app.include_router(auth_router)
+app.include_router(restaurants_router)
+app.include_router(catalog_router)
