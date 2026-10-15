@@ -13,6 +13,7 @@ from app.orders.enums import OrderStatus
 
 if TYPE_CHECKING:
     from app.catalog.models import MenuItem
+    from app.delivery.models import Delivery
     from app.identity.models import User
     from app.payments.models import Payment
     from app.restaurants.models import Restaurant
@@ -188,6 +189,11 @@ class Order(Base):
     payments: Mapped[list["Payment"]] = relationship(
         "Payment",
         back_populates="order",
+    )
+    delivery: Mapped["Delivery | None"] = relationship(
+        "Delivery",
+        back_populates="order",
+        uselist=False,
     )
 
     def __init__(
