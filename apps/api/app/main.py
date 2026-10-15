@@ -6,6 +6,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 from app.core.config import settings
 from app.core.database import close_db_engine
+from app.identity.router import router as auth_router
 
 
 @asynccontextmanager
@@ -58,3 +59,7 @@ async def health_check():
         "version": settings.VERSION,
         "environment": settings.API_ENV,
     }
+
+
+# Feature routers
+app.include_router(auth_router)
