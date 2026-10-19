@@ -5,6 +5,9 @@ from collections.abc import Sequence
 
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.delivery.enums import DeliveryStatus
+from app.delivery.models import Delivery
+from app.delivery.repository import DeliveryRepository
 from app.identity.enums import UserRole
 from app.identity.models import User
 from app.orders.enums import OrderStatus
@@ -67,10 +70,12 @@ class RestaurantOrderService:
         session: AsyncSession,
         order_repo: OrderRepository | None = None,
         restaurant_repo: RestaurantRepository | None = None,
+        delivery_repo: DeliveryRepository | None = None,
     ) -> None:
         self.session = session
         self.order_repo = order_repo or OrderRepository(session)
         self.restaurant_repo = restaurant_repo or RestaurantRepository(session)
+        self.delivery_repo = delivery_repo or DeliveryRepository(session)
 
     async def _verify_restaurant_ownership(
         self,
@@ -327,5 +332,15 @@ class RestaurantOrderService:
             )
         except InvalidOrderStateTransitionError as exc:
             raise InvalidOrderTransitionError(str(exc)) from exc
+
+        # When an order becomes READY_FOR_PICKUP, ensure an unassigned Delivery job is created
+        if target == OrderStatus.READY_FOR_PICKUP:
+            existing_delivery = await self.delivery_repo.get_by_order_id(order.id)
+            if existing_delivery is None:
+                new_delivery = Delivery(
+                    order_id=order.id,
+                    status=DeliveryStatus.UNASSIGNED,
+                )
+                await self.delivery_repo.create(new_delivery)
 
         return order
