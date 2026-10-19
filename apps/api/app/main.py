@@ -11,6 +11,7 @@ from app.core.config import settings
 from app.core.database import close_db_engine
 from app.identity.router import router as auth_router
 from app.orders.router import router as orders_router
+from app.restaurant_orders.router import router as restaurant_orders_router
 from app.restaurants.router import router as restaurants_router
 
 
@@ -73,3 +74,4 @@ app.include_router(catalog_router)
 app.include_router(cart_router)
 app.include_router(checkout_router)
 app.include_router(orders_router)
+app.include_router(restaurant_orders_router)
