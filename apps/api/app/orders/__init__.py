@@ -2,7 +2,9 @@
 
 from app.orders.enums import OrderStatus
 from app.orders.exceptions import (
+    InvalidOrderTransitionError,
     OrderError,
+    OrderNotEligibleError,
     OrderNotFoundError,
     UnauthorizedOrderAccessError,
 )
@@ -29,11 +31,13 @@ __all__ = [
     "VALID_TRANSITIONS",
     "DeliveryAddressResponse",
     "InvalidOrderStateTransitionError",
+    "InvalidOrderTransitionError",
     "Order",
     "OrderError",
     "OrderItem",
     "OrderItemResponse",
     "OrderListResponse",
+    "OrderNotEligibleError",
     "OrderNotFoundError",
     "OrderRepository",
     "OrderResponse",

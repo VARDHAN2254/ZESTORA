@@ -11,3 +11,11 @@ class OrderNotFoundError(OrderError):
 
 class UnauthorizedOrderAccessError(OrderError):
     """Raised when an unauthorized user attempts to access an order."""
+
+
+class InvalidOrderTransitionError(OrderError):
+    """Raised when an invalid order state transition is attempted by an actor."""
+
+
+class OrderNotEligibleError(OrderError):
+    """Raised when an order is not eligible for the requested operation."""
