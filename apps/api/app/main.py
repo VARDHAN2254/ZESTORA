@@ -9,6 +9,7 @@ from app.catalog.router import router as catalog_router
 from app.checkout.router import router as checkout_router
 from app.core.config import settings
 from app.core.database import close_db_engine
+from app.delivery.router import router as delivery_partner_router
 from app.identity.router import router as auth_router
 from app.orders.router import router as orders_router
 from app.restaurant_orders.router import router as restaurant_orders_router
@@ -75,3 +76,4 @@ app.include_router(cart_router)
 app.include_router(checkout_router)
 app.include_router(orders_router)
 app.include_router(restaurant_orders_router)
+app.include_router(delivery_partner_router)
